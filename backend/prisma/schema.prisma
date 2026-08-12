@@ -1,0 +1,192 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum VehicleCategory {
+  TWO_WHEELER
+  FOUR_WHEELER
+}
+
+enum VehicleSubCategory {
+  HATCHBACK
+  SEDAN
+  SUV
+  COMPACT_SUV
+  MOTORCYCLE_ABOVE_200CC
+  SCOOTY_ABOVE_125CC
+  MOTORCYCLE_BELOW_200CC
+  MUV
+  SCOOTY_BELOW_110CC
+}
+
+enum VehicleStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ExpenseType {
+  WASHING
+  FUEL
+  VEHICLE_SERVICE
+  OFFICE
+}
+
+enum WashingServiceType {
+  BODY_WASH
+  INTERIOR_CLEANING
+  EXTERIOR_CLEANING
+  VACUUM_CLEANING
+  POLISHING
+  WAXING
+  FULL_CLEANING
+  DETAILING
+  OTHER
+}
+
+enum ServiceExpenseType {
+  RENT_SHARE
+  SERVICE
+  PURCHASE
+  TOLL_GATE
+  EMI
+  PAINT
+  TOWING_CHARGE
+  PUC
+  INSURANCE
+  GPS
+  OTHER
+}
+
+enum PaymentMethod {
+  SBI
+  CASH
+  UPI
+  NA
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+}
+
+enum PartyType {
+  FUEL_STATION
+  WASHING_CENTER
+  SERVICE_CENTER
+  SUPPLIER
+  OFFICE_VENDOR
+  OTHER
+}
+
+enum PartyStatus {
+  ACTIVE
+  INACTIVE
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String?  @unique
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Vehicle {
+  id              String             @id @default(cuid())
+  vehicleNumber   String             @unique
+  vehicleCategory VehicleCategory
+  subCategory     VehicleSubCategory
+  modelName       String
+  status          VehicleStatus      @default(ACTIVE)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  expenses       Expense[]
+  revenues       VehicleRevenue[]
+
+  @@index([vehicleNumber])
+  @@index([status])
+  @@index([vehicleCategory])
+  @@index([subCategory])
+  @@map("vehicles")
+}
+
+model Party {
+  id        String      @id @default(cuid())
+  name      String
+  type      PartyType
+  status    PartyStatus @default(ACTIVE)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  expenses Expense[]
+
+  @@index([status])
+  @@index([type])
+  @@map("parties")
+}
+
+model Expense {
+  id                 String              @id @default(cuid())
+  expenseType        ExpenseType
+  date               DateTime            @db.Date
+  vehicleId          String?
+  partyId            String?
+  amount             Decimal             @db.Decimal(12, 2)
+  paymentMethod      PaymentMethod
+  paymentStatus      PaymentStatus
+  serviceType        WashingServiceType?
+  serviceExpenseType ServiceExpenseType?
+  expenseDescription String?
+  note               String?
+  isDeleted          Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
+  party   Party?   @relation(fields: [partyId], references: [id])
+
+  @@index([date])
+  @@index([vehicleId])
+  @@index([expenseType])
+  @@index([paymentStatus])
+  @@index([paymentMethod])
+  @@index([partyId])
+  @@index([isDeleted])
+  @@index([date, vehicleId])
+  @@index([date, expenseType])
+  @@map("expenses")
+}
+
+model VehicleRevenue {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  year          Int
+  revenueAmount Decimal  @db.Decimal(12, 2)
+  note          String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id])
+
+  @@unique([vehicleId, year])
+  @@index([vehicleId])
+  @@index([year])
+  @@map("vehicle_revenues")
+}

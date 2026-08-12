@@ -1,0 +1,153 @@
+/* FleetCost — Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #1e40af;
+  --primary-light: #eff6ff;
+  --success: #16a34a;
+  --danger: #dc2626;
+  --warning: #d97706;
+  --sidebar-width: 240px;
+  --topbar-height: 60px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  color: #1f2937;
+  background: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar hover effects ─────────────────────────── */
+.sidebar-nav-item:hover {
+  background: rgba(255,255,255,0.12) !important;
+  color: #ffffff !important;
+}
+
+/* ── Cards ─────────────────────────────────────────── */
+.card {
+  border-radius: 12px;
+}
+
+/* ── Tables ─────────────────────────────────────────── */
+.table {
+  font-size: 0.875rem;
+}
+
+.table thead th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: #6b7280;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 12px;
+}
+
+.table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background: #f8faff;
+}
+
+/* ── Form controls ──────────────────────────────────── */
+.form-control, .form-select {
+  border-color: #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  padding: 8px 12px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+}
+
+.input-group-text {
+  background: #f9fafb;
+  border-color: #e5e7eb;
+  color: #6b7280;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: #1e40af;
+  border-color: #1e40af;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.btn-sm {
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  border-radius: 6px;
+}
+
+/* ── Badges ──────────────────────────────────────────── */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  border-radius: 6px;
+}
+
+/* ── Alerts ──────────────────────────────────────────── */
+.alert {
+  border-radius: 10px;
+  border: none;
+}
+
+/* ── Modal ──────────────────────────────────────────── */
+.modal-content {
+  border-radius: 16px;
+}
+
+/* ── Progress ─────────────────────────────────────────── */
+.progress {
+  border-radius: 99px;
+  background: #e5e7eb;
+}
+
+.progress-bar {
+  border-radius: 99px;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Toast animation ─────────────────────────────────── */
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  body { font-size: 13px; }
+  .table-responsive { font-size: 0.78rem; }
+}
+
+/* ── Purple badges (no Bootstrap built-in) ──────────── */
+.bg-purple-subtle { background-color: #f5f3ff; }
+.text-purple { color: #7c3aed; }
