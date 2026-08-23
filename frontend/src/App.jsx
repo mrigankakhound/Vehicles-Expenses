@@ -47,11 +47,11 @@ function App() {
             <Route path="vehicles/:id" element={<VehicleForm />} />
 
             {/* Expenses */}
-            <Route path="expenses" element={<AllExpenses />} />
-            <Route path="expenses/washing" element={<AllExpenses filterType="WASHING" />} />
-            <Route path="expenses/fuel" element={<AllExpenses filterType="FUEL" />} />
-            <Route path="expenses/service" element={<AllExpenses filterType="VEHICLE_SERVICE" />} />
-            <Route path="expenses/office" element={<AllExpenses filterType="OFFICE" />} />
+            <Route path="expenses" element={<AllExpenses key="all" />} />
+            <Route path="expenses/washing" element={<AllExpenses key="washing" filterType="WASHING" />} />
+            <Route path="expenses/fuel" element={<AllExpenses key="fuel" filterType="FUEL" />} />
+            <Route path="expenses/service" element={<AllExpenses key="service" filterType="VEHICLE_SERVICE" />} />
+            <Route path="expenses/office" element={<AllExpenses key="office" filterType="OFFICE" />} />
             <Route path="expenses/new" element={<ExpenseForm />} />
             <Route path="expenses/:id/edit" element={<ExpenseForm />} />
 

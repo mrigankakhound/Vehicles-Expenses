@@ -1,5 +1,5 @@
 # ==========================================
-# VEHICLE EXPENSE - Git Ignore
+# VEHICLE EXPENSE — Root .gitignore
 # ==========================================
 
 # ------------------------------------------
@@ -9,56 +9,82 @@ node_modules/
 **/node_modules/
 
 # ------------------------------------------
-# Environment variables / Secrets
+# Environment Variables / Secrets
+# (NEVER commit real secrets to git)
 # ------------------------------------------
 .env
 .env.local
 .env.*.local
+backend/.env
+frontend/.env
+frontend/.env.production
+
+# Keep example/template env files
 !.env.example
-!.env.production
+!*/.env.example
 
 # ------------------------------------------
-# Backend - Node.js
-# ------------------------------------------
-backend/logs/
-backend/*.log
-backend/npm-debug.log*
-backend/yarn-debug.log*
-backend/pnpm-debug.log*
-
-# ------------------------------------------
-# Frontend - Vite / React
+# Frontend — Vite / React Build Output
 # ------------------------------------------
 frontend/dist/
 frontend/build/
 frontend/.vite/
 
 # ------------------------------------------
-# Backend build/output
+# Backend — Build Output
 # ------------------------------------------
 backend/dist/
 backend/build/
 
 # ------------------------------------------
-# Coverage
+# Backend — Logs
+# ------------------------------------------
+backend/logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ------------------------------------------
+# Prisma — SQLite local databases (if any)
+# ------------------------------------------
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/prisma/*.db-shm
+backend/prisma/*.db-wal
+
+# ------------------------------------------
+# Test / Coverage
 # ------------------------------------------
 coverage/
 **/coverage/
 .nyc_output/
+*.lcov
 
 # ------------------------------------------
-# Temporary files
+# Cache / Temporary Files
 # ------------------------------------------
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
 tmp/
 temp/
 *.tmp
+*.pid
+*.seed
 
 # ------------------------------------------
-# OS files
+# OS Files
 # ------------------------------------------
 .DS_Store
+.DS_Store?
+._*
 Thumbs.db
 desktop.ini
+ehthumbs.db
 
 # ------------------------------------------
 # Windows
@@ -72,34 +98,20 @@ desktop.ini
 .idea/
 *.swp
 *.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
 
 # ------------------------------------------
-# Prisma
-# ------------------------------------------
-backend/prisma/*.db
-backend/prisma/*.db-journal
-backend/prisma/*.db-shm
-backend/prisma/*.db-wal
-
-# ------------------------------------------
-# Test / Cache
-# ------------------------------------------
-.cache/
-.parcel-cache/
-.eslintcache
-
-# ------------------------------------------
-# Vercel
+# Deployment Platforms
 # ------------------------------------------
 .vercel/
-
-# ------------------------------------------
-# Render / deployment
-# ------------------------------------------
 .render/
+.netlify/
 
 # ------------------------------------------
 # Misc
 # ------------------------------------------
-*.pid
-*.seed
+*.tgz
+*.zip
