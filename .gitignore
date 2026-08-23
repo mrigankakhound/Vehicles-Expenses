@@ -16,14 +16,15 @@ node_modules/
 .env.local
 .env.*.local
 backend/.env
-frontend/.env
+frontend/.env.production
 frontend/.env.local
 frontend/.env.*.local
 
-# Keep example/template env files and production env (needed for Vercel build)
+# Keep example/template env files
+# frontend/.env is intentionally committed (only contains public VITE_API_URL)
 !.env.example
 !*/.env.example
-!frontend/.env.production
+!frontend/.env
 
 # ------------------------------------------
 # Frontend — Vite / React Build Output
