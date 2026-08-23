@@ -17,11 +17,13 @@ node_modules/
 .env.*.local
 backend/.env
 frontend/.env
-frontend/.env.production
+frontend/.env.local
+frontend/.env.*.local
 
-# Keep example/template env files
+# Keep example/template env files and production env (needed for Vercel build)
 !.env.example
 !*/.env.example
+!frontend/.env.production
 
 # ------------------------------------------
 # Frontend — Vite / React Build Output
