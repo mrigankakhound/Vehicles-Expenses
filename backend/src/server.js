@@ -98,6 +98,31 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/export', exportRoutes);
 app.use('/api/import', importRoutes);
 
+// ─── TEMPORARY: One-time seed endpoint (REMOVE AFTER USE) ────────────────────
+app.get('/api/seed-init', async (req, res) => {
+  if (req.query.secret !== 'fleetcost-seed-2024') {
+    return res.status(403).json({ success: false, message: 'Forbidden' });
+  }
+  try {
+    const bcrypt = require('bcryptjs');
+    const prisma = require('./config/prisma');
+    const passwordHash = await bcrypt.hash('Admin@1234', 12);
+    const admin = await prisma.user.upsert({
+      where: { username: 'admin' },
+      update: {},
+      create: {
+        username: 'admin',
+        email: 'admin@fleetcost.local',
+        passwordHash,
+        role: 'ADMIN',
+      },
+    });
+    res.json({ success: true, message: `Admin user ready: ${admin.username}` });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // ─── 404 Handler ──────────────────────────────────────────────────────────────
 app.use('*', (req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
