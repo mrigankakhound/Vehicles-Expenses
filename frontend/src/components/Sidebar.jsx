@@ -60,11 +60,18 @@ const navItems = [
   },
 ];
 
-const Sidebar = ({ collapsed, onToggle }) => {
+const Sidebar = ({ collapsed, onToggle, mobileOpen, onMobileClose }) => {
   const location = useLocation();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [openMenus, setOpenMenus] = useState({});
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Auto-open the menu containing the current path
@@ -92,43 +99,62 @@ const Sidebar = ({ collapsed, onToggle }) => {
     return location.pathname.startsWith(path);
   };
 
+  // On mobile: sidebar is an overlay drawer, always full-width (240px), shown/hidden via mobileOpen
+  // On desktop: sidebar is fixed, toggles between 240px and 64px
+  const sidebarWidth = isMobile ? '260px' : (collapsed ? '64px' : '240px');
+  const showCollapsed = isMobile ? false : collapsed;
+
+  const sidebarStyle = {
+    width: sidebarWidth,
+    minHeight: '100vh',
+    background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 40%, #1d4ed8 100%)',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    boxShadow: '4px 0 20px rgba(0,0,0,0.15)',
+    display: 'flex',
+    flexDirection: 'column',
+    // Mobile: slide in/out; Desktop: resize
+    transform: isMobile ? (mobileOpen ? 'translateX(0)' : 'translateX(-100%)') : 'translateX(0)',
+    transition: isMobile ? 'transform 0.3s ease' : 'width 0.3s ease',
+  };
+
   return (
-    <aside
-      className="sidebar d-flex flex-column"
-      style={{
-        width: collapsed ? '64px' : '240px',
-        minHeight: '100vh',
-        background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 40%, #1d4ed8 100%)',
-        transition: 'width 0.3s ease',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        zIndex: 1000,
-        overflowX: 'hidden',
-        boxShadow: '4px 0 20px rgba(0,0,0,0.15)',
-      }}
-    >
+    <aside className="sidebar" style={sidebarStyle}>
       {/* Header */}
-      <div className="d-flex align-items-center px-3 py-3 border-bottom border-primary border-opacity-25">
+      <div className="d-flex align-items-center px-3 py-3 border-bottom border-primary border-opacity-25" style={{ flexShrink: 0 }}>
         <div
           className="d-flex align-items-center justify-content-center rounded-2"
           style={{ width: 36, height: 36, background: 'rgba(255,255,255,0.15)', flexShrink: 0 }}
         >
           <i className="bi bi-truck text-white" style={{ fontSize: '1.1rem' }}></i>
         </div>
-        {!collapsed && (
+        {!showCollapsed && (
           <div className="ms-2 overflow-hidden">
             <div className="text-white fw-bold" style={{ fontSize: '1rem', whiteSpace: 'nowrap' }}>FleetCost</div>
             <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.6)', whiteSpace: 'nowrap' }}>Vehicle Management</div>
           </div>
         )}
-        <button
-          className="btn btn-link text-white ms-auto p-0"
-          onClick={onToggle}
-          style={{ flexShrink: 0 }}
-        >
-          <i className={`bi ${collapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
-        </button>
+        {isMobile ? (
+          <button
+            className="btn btn-link text-white ms-auto p-0"
+            onClick={onMobileClose}
+            style={{ flexShrink: 0 }}
+          >
+            <i className="bi bi-x-lg"></i>
+          </button>
+        ) : (
+          <button
+            className="btn btn-link text-white ms-auto p-0"
+            onClick={onToggle}
+            style={{ flexShrink: 0 }}
+          >
+            <i className={`bi ${collapsed ? 'bi-chevron-right' : 'bi-chevron-left'}`}></i>
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -151,14 +177,14 @@ const Sidebar = ({ collapsed, onToggle }) => {
                   }}
                 >
                   <i className={`bi ${item.icon}`} style={{ fontSize: '1.1rem', flexShrink: 0, width: 20, textAlign: 'center' }}></i>
-                  {!collapsed && (
+                  {!showCollapsed && (
                     <>
                       <span style={{ flexGrow: 1, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>{item.label}</span>
                       <i className={`bi ${isOpen ? 'bi-chevron-down' : 'bi-chevron-right'}`} style={{ fontSize: '0.7rem' }}></i>
                     </>
                   )}
                 </button>
-                {!collapsed && isOpen && (
+                {!showCollapsed && isOpen && (
                   <div style={{ background: 'rgba(0,0,0,0.15)' }}>
                     {item.children.map((child) => (
                       <Link
@@ -166,7 +192,6 @@ const Sidebar = ({ collapsed, onToggle }) => {
                         to={child.path}
                         className="d-flex align-items-center px-3 py-2 text-decoration-none"
                         style={{
-                          paddingLeft: '52px !important',
                           background: isActive(child.path) ? 'rgba(255,255,255,0.2)' : 'transparent',
                           color: isActive(child.path) ? '#ffffff' : 'rgba(255,255,255,0.7)',
                           fontSize: '0.82rem',
@@ -200,14 +225,14 @@ const Sidebar = ({ collapsed, onToggle }) => {
               }}
             >
               <i className={`bi ${item.icon}`} style={{ fontSize: '1.1rem', flexShrink: 0, width: 20, textAlign: 'center' }}></i>
-              {!collapsed && <span style={{ whiteSpace: 'nowrap' }}>{item.label}</span>}
+              {!showCollapsed && <span style={{ whiteSpace: 'nowrap' }}>{item.label}</span>}
             </Link>
           );
         })}
       </nav>
 
       {/* User info + logout */}
-      <div className="border-top border-primary border-opacity-25 px-3 py-2">
+      <div className="border-top border-primary border-opacity-25 px-3 py-2" style={{ flexShrink: 0 }}>
         <div className="d-flex align-items-center gap-2">
           <div
             className="d-flex align-items-center justify-content-center rounded-circle"
@@ -215,7 +240,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
           >
             <i className="bi bi-person text-white" style={{ fontSize: '0.9rem' }}></i>
           </div>
-          {!collapsed && (
+          {!showCollapsed && (
             <div className="flex-grow-1 overflow-hidden">
               <div className="text-white fw-semibold" style={{ fontSize: '0.8rem', whiteSpace: 'nowrap' }}>{user?.username}</div>
               <div style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.6)' }}>Administrator</div>

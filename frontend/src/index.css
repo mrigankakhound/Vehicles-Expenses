@@ -142,12 +142,126 @@ body {
   to { transform: translateX(0); opacity: 1; }
 }
 
-/* ── Responsive ─────────────────────────────────────── */
-@media (max-width: 768px) {
-  body { font-size: 13px; }
-  .table-responsive { font-size: 0.78rem; }
-}
-
 /* ── Purple badges (no Bootstrap built-in) ──────────── */
 .bg-purple-subtle { background-color: #f5f3ff; }
 .text-purple { color: #7c3aed; }
+
+/* ── Main content layout ─────────────────────────────── */
+.main-content {
+  padding: 24px;
+  padding-top: 80px;
+}
+
+/* ─────────────────────────────────────────────────────── */
+/* ── Responsive — Mobile (< 768px) ──────────────────── */
+/* ─────────────────────────────────────────────────────── */
+@media (max-width: 767.98px) {
+  body { font-size: 13px; }
+
+  /* Main content fills full width on mobile (no sidebar offset) */
+  .main-content {
+    padding: 12px;
+    padding-top: 72px;
+  }
+
+  /* Tables scroll horizontally on mobile */
+  .table-responsive {
+    font-size: 0.78rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Shrink card padding on mobile */
+  .card-body {
+    padding: 12px !important;
+  }
+
+  .card-header {
+    padding: 10px 12px !important;
+  }
+
+  /* PageCard actions stack on mobile */
+  .card-header .d-flex.gap-2 {
+    flex-wrap: wrap;
+    gap: 6px !important;
+  }
+
+  /* Buttons full-width in stacked forms */
+  .btn-mobile-full {
+    width: 100%;
+  }
+
+  /* Summary cards: smaller text on mobile */
+  .summary-card-value {
+    font-size: 0.95rem !important;
+  }
+
+  /* Reduce modal padding on mobile */
+  .modal-dialog {
+    margin: 8px;
+  }
+
+  .modal-body {
+    padding: 16px !important;
+  }
+
+  /* Filter rows wrap on mobile */
+  .filter-row {
+    flex-direction: column;
+  }
+
+  .filter-row > * {
+    width: 100%;
+  }
+
+  /* Pagination centered on mobile */
+  .pagination {
+    justify-content: center !important;
+    flex-wrap: wrap;
+  }
+
+  /* Chart containers shorter on mobile */
+  .chart-container-mobile {
+    height: 200px !important;
+  }
+
+  /* Toast smaller on mobile */
+  .toast-container {
+    right: 8px !important;
+    bottom: 8px !important;
+  }
+}
+
+/* ── Small phones (< 480px) ──────────────────────────── */
+@media (max-width: 479.98px) {
+  .main-content {
+    padding: 10px;
+    padding-top: 70px;
+  }
+
+  .card-body {
+    padding: 10px !important;
+  }
+
+  .table {
+    font-size: 0.75rem;
+  }
+
+  .table thead th,
+  .table td {
+    padding: 8px 8px;
+  }
+
+  /* Stack row grids to single column on very small screens */
+  .row-cols-mobile-1 > * {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* ── Tablet (768px – 1023px) ─────────────────────────── */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .main-content {
+    padding: 20px;
+    padding-top: 80px;
+  }
+}
